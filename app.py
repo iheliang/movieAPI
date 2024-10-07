@@ -21,6 +21,9 @@ def get_movies():
     # 获取用户传递的 limit 参数，默认是 10
     limit = request.args.get('limit', default=10, type=int)
 
+    # 获取用户传递的 min_rating 参数，默认是不对评分进行过滤
+    min_rating = request.args.get("min_rating", default=None, type=float)
+
     # 直接使用数据库的中文列名查询
     query = """
     SELECT
@@ -36,10 +39,17 @@ def get_movies():
         剧情简介,
         评分
     FROM movies
-    LIMIT %s
     """
+    if min_rating is not None:
+        # query += " WHERE 评分 > %s"
+        # cursor.execute(query + "LIMIT %s", (min_rating, limit))
 
-    cursor.execute(query, (limit,))
+        query += " WHERE 评分 > %s"
+        query += " LIMIT %s"
+        print("查询语句:", query)
+        cursor.execute(query, (min_rating, limit))
+    else:
+        cursor.execute(query + "LIMIT %s", (limit,))
     movies = cursor.fetchall()
 
     cursor.close()
