@@ -19,7 +19,7 @@ print(completion.choices[0].message.content)
 aicontent = completion.choices[0].message.content
 
 # 将your-dashscope-api-key替换成您自己的API-KEY
-dashscope.api_key = "sk-2265cd970a0740c0b7383e6731d3a472"
+dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
 model = "cosyvoice-v1"
 voice = "longxiaochun"
 
